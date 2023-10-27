@@ -11,6 +11,10 @@
     Unloaded="Page_Unloaded">
 
     <StackPanel Background="Black">
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" >
+            <TextBlock FontSize="20" Foreground="White" Text="Is Dynamic Lighting Available:" />
+            <TextBlock Name="_mLblAvailable" FontSize="20" Foreground="White"  Text="?" Padding="20, 0, 0, 0"/>
+        </StackPanel>
         <TextBlock Name="_mTxtDebug" Margin="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" FontSize="20" Text=""></TextBlock>
     </StackPanel>
 </Page>

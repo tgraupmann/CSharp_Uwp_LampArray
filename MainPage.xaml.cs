@@ -10,6 +10,8 @@ using Windows.UI.Core;
 using Windows.UI;
 using System.Numerics;
 using Windows.Devices.Lights.Effects;
+using Windows.Foundation.Metadata;
+using System.Reflection;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -45,6 +47,51 @@ namespace CSharp_Uwp_LampArray
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            #region Check if DL is available
+
+            if (ApiInformation.IsPropertyPresent("Windows.Devices.Lights.LampArray", "IsAvailable"))
+            {
+                try
+                {
+                    Type lampArrayType = typeof(LampArray);
+                    if (lampArrayType != null)
+                    {
+                        // Get the property info
+                        PropertyInfo isAvailableProperty = lampArrayType.GetProperty("IsAvailable");
+
+                        if (isAvailableProperty == null)
+                        {
+                            _mLblAvailable.Text = "NO";
+                        }
+                        else
+                        {
+                            // Invoke the property (assuming it's a bool property)
+                            bool isAvailable = (bool)isAvailableProperty.GetValue(null, null);
+
+                            // Now you can use the value of the property
+                            Console.WriteLine("IsAvailable: " + isAvailable);
+                            if (isAvailable)
+                            {
+                                _mLblAvailable.Text = "YES";
+                            }
+                            else
+                            {
+                                _mLblAvailable.Text = "NO";
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    _mLblAvailable.Text = "EXCEPTION, NO";
+                }
+            }
+            else
+            {
+                _mLblAvailable.Text = "NO";
+            }
+
+            #endregion
 
             #region Get Device Selector
 
