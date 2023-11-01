@@ -26,6 +26,7 @@ namespace CSharp_Uwp_LampArray
         {
             public string _mId;
             public string _mName;
+            public TimeSpan _mMinUpdateInterval = TimeSpan.Zero;
             public int _mLampCount;
             public List<int> _mIndexes;
             public LampArrayCustomEffect _mEffect;
@@ -51,40 +52,7 @@ namespace CSharp_Uwp_LampArray
 
             if (ApiInformation.IsPropertyPresent("Windows.Devices.Lights.LampArray", "IsAvailable"))
             {
-                try
-                {
-                    Type lampArrayType = typeof(LampArray);
-                    if (lampArrayType != null)
-                    {
-                        // Get the property info
-                        PropertyInfo isAvailableProperty = lampArrayType.GetProperty("IsAvailable");
-
-                        if (isAvailableProperty == null)
-                        {
-                            _mLblAvailable.Text = "NO";
-                        }
-                        else
-                        {
-                            // Invoke the property (assuming it's a bool property)
-                            bool isAvailable = (bool)isAvailableProperty.GetValue(null, null);
-
-                            // Now you can use the value of the property
-                            Console.WriteLine("IsAvailable: " + isAvailable);
-                            if (isAvailable)
-                            {
-                                _mLblAvailable.Text = "YES";
-                            }
-                            else
-                            {
-                                _mLblAvailable.Text = "NO";
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-                    _mLblAvailable.Text = "EXCEPTION, NO";
-                }
+                _mLblAvailable.Text = "YES";
             }
             else
             {
@@ -229,6 +197,13 @@ namespace CSharp_Uwp_LampArray
                 #endregion Get LampArray
 
 
+                #region Get refresh rate
+
+                meta._mMinUpdateInterval = lampArray.MinUpdateInterval;
+
+                #endregion Get refresh rate
+
+
                 #region Get lamp count
 
                 meta._mLampCount = lampArray.LampCount;
@@ -257,10 +232,11 @@ namespace CSharp_Uwp_LampArray
                 #endregion Get enabled
 
 
-                LogInfo("Added device: name={0} isEnabled={1} isConnected={2} lampCount={3} id={4}\n",
+                LogInfo("Added device: name={0} isEnabled={1} isConnected={2} minUpdateInterval={3} lampCount={4} id={5}\n",
                     meta._mName,
                     isEnabled ? "true" : "false",
                     isConnected ? "true" : "false",
+                    meta._mMinUpdateInterval.TotalMilliseconds,
                     meta._mLampCount,
                     id);
 
